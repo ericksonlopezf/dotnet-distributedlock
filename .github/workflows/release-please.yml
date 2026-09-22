@@ -1,0 +1,89 @@
+# Copyright © Erickson Lopez. MIT License.
+# ─── Release Please ─────────────────────────────────────────────────────────────
+# Automates version management and GitHub Releases using Conventional Commits.
+# (CHANGELOG.md is maintained manually following Keep a Changelog format,
+#  so skip-changelog is enabled in .release-please-config.json).
+#
+# How it works:
+#   1. On every push to `main`, this workflow analyses commit messages using
+#      the Conventional Commits specification (https://www.conventionalcommits.org).
+#   2. Based on the commit messages since the last release, it determines the
+#      next version number according to SemVer:
+#        - fix:       PATCH bump   (1.0.0 → 1.0.1)
+#        - feat:      MINOR bump   (1.0.0 → 1.1.0)
+#        - feat!: or BREAKING CHANGE:  MAJOR bump  (1.0.0 → 2.0.0)
+#        - chore:, docs:, test:, refactor:, perf:  → no version bump
+#   3. It creates or updates a "Release PR" that contains:
+#        - A version bump commit in `Directory.Build.props`
+#   4. When the maintainer merges the Release PR, Release Please automatically:
+#        - Tags the merge commit with the new version (e.g., v1.2.3)
+#        - Creates a GitHub Release with the generated release notes
+#   5. The tag `v1.2.3` triggers `publish.yml`, which packs and publishes
+#        the NuGet packages.
+#
+# Commit message examples:
+#   fix: correct lock renewal timeout in Redis engine
+#   feat: add support for PostgreSQL advisory lock timeouts
+#   feat!: remove deprecated lock interface methods
+#   docs: update README with multi-dialect examples
+#   chore(deps): bump Npgsql from 9.0.2 to 9.0.3
+# ─────────────────────────────────────────────────────────────────────────────────
+
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      major: ${{ steps.release.outputs.major }}
+      minor: ${{ steps.release.outputs.minor }}
+      patch: ${{ steps.release.outputs.patch }}
+      sha: ${{ steps.release.outputs.sha }}
+
+    steps:
+      - name: Release Please
+        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        id: release
+        with:
+          config-file: .release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  # ─── Trigger publish on release ─────────────────────────────────────────────
+  # When Release Please creates the GitHub Release (by merging the Release PR),
+  # trigger the publish workflow to build and push NuGet packages.
+  trigger-publish:
+    name: Trigger NuGet Publish
+    runs-on: ubuntu-latest
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Trigger publish.yml
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'publish.yml',
+              ref: '${{ needs.release-please.outputs.tag_name }}',
+              inputs: {
+                version: '${{ needs.release-please.outputs.major }}.${{ needs.release-please.outputs.minor }}.${{ needs.release-please.outputs.patch }}'
+              }
+            });

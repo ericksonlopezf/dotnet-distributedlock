@@ -1,0 +1,84 @@
+# Copyright © Erickson Lopez. MIT License.
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+
+# C# files
+[*.cs]
+# Indentation and formatting
+csharp_indent_braces = false
+csharp_indent_switch_labels = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_else = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_open_brace = all
+csharp_prefer_braces = true:silent
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_style_var_for_built_in_types = false:silent
+csharp_style_var_when_type_is_apparent = true:silent
+
+# Naming Conventions
+dotnet_naming_rule.types_and_namespaces_must_be_pascal_case.severity = warning
+dotnet_naming_rule.types_and_namespaces_must_be_pascal_case.symbols = types_and_namespaces
+dotnet_naming_rule.types_and_namespaces_must_be_pascal_case.style = pascal_case
+
+dotnet_naming_symbols.types_and_namespaces.applicable_kinds = class, struct, interface, enum, property, method, event, namespace
+dotnet_naming_symbols.types_and_namespaces.applicable_accessibilities = *
+
+dotnet_naming_rule.interfaces_must_start_with_i.severity = warning
+dotnet_naming_rule.interfaces_must_start_with_i.symbols = interface_symbols
+dotnet_naming_rule.interfaces_must_start_with_i.style = prefix_i
+
+dotnet_naming_symbols.interface_symbols.applicable_kinds = interface
+dotnet_naming_symbols.interface_symbols.applicable_accessibilities = *
+dotnet_naming_style.prefix_i.required_prefix = I
+dotnet_naming_style.prefix_i.capitalization = pascal_case
+
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# Code Analysis Diagnostic Severities
+dotnet_diagnostic.IDE1006.severity = warning
+dotnet_diagnostic.CA1707.severity = warning
+dotnet_diagnostic.CA1852.severity = warning
+dotnet_diagnostic.CA1305.severity = warning
+dotnet_diagnostic.CS0619.severity = error
+dotnet_diagnostic.CS0618.severity = error
+dotnet_diagnostic.CS0159.severity = error
+dotnet_diagnostic.CS159.severity = error
+dotnet_diagnostic.xUnit1051.severity = warning
+dotnet_diagnostic.CS1591.severity = warning
+dotnet_diagnostic.CA1848.severity = suggestion
+dotnet_diagnostic.CA1873.severity = suggestion
+
+# Test projects overrides
+[tests/**/*.cs]
+# Allow underscores in unit test method names (e.g. UnitOfWork_State_ExpectedResult)
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.IDE1006.severity = suggestion
+dotnet_diagnostic.CS1591.severity = none
+dotnet_diagnostic.CA1852.severity = suggestion
+# ADO.NET fake test mock nullability annotations
+dotnet_diagnostic.CS8765.severity = suggestion
+dotnet_diagnostic.CS8767.severity = suggestion
+dotnet_diagnostic.CS8618.severity = suggestion
+dotnet_diagnostic.CS8769.severity = suggestion
+
+# Samples projects overrides
+[samples/**/*.cs]
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CS1591.severity = none
+dotnet_diagnostic.IDE1006.severity = suggestion
+

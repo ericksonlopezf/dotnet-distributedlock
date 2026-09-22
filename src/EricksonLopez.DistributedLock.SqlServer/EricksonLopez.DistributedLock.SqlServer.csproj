@@ -1,0 +1,24 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>EricksonLopez.DistributedLock.SqlServer</AssemblyName>
+    <RootNamespace>EricksonLopez.DistributedLock.SqlServer</RootNamespace>
+    <PackageId>EricksonLopez.DistributedLock.SqlServer</PackageId>
+    <Description>Microsoft SQL Server application lock provider implementing IDistributedLockProvider for the EricksonLopez platform using sp_getapplock / sp_releaseapplock. Features 100% Native AOT compatibility, zero-allocation error handling, keepalive heartbeats, and OpenTelemetry instrumentation.</Description>
+    <PackageTags>$(CommonPackageTags);sqlserver;mssql;applock;sp-getapplock;sqlclient;opentelemetry</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EricksonLopez.DistributedLock.Abstractions\EricksonLopez.DistributedLock.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

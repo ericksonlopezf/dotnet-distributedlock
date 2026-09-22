@@ -1,0 +1,29 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EricksonLopez.DistributedLock.Abstractions/EricksonLopez.DistributedLock.Abstractions.csproj" />
+    <Project Path="src/EricksonLopez.DistributedLock.PostgreSql/EricksonLopez.DistributedLock.PostgreSql.csproj" />
+    <Project Path="src/EricksonLopez.DistributedLock.SqlServer/EricksonLopez.DistributedLock.SqlServer.csproj" />
+    <Project Path="src/EricksonLopez.DistributedLock.MySql/EricksonLopez.DistributedLock.MySql.csproj" />
+    <Project Path="src/EricksonLopez.DistributedLock.MariaDb/EricksonLopez.DistributedLock.MariaDb.csproj" />
+    <Project Path="src/EricksonLopez.DistributedLock.Oracle/EricksonLopez.DistributedLock.Oracle.csproj" />
+    <Project Path="src/EricksonLopez.DistributedLock.Sqlite/EricksonLopez.DistributedLock.Sqlite.csproj" />
+    <Project Path="src/EricksonLopez.DistributedLock.Redis/EricksonLopez.DistributedLock.Redis.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EricksonLopez.DistributedLock.Abstractions.Tests/EricksonLopez.DistributedLock.Abstractions.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.PostgreSql.Tests/EricksonLopez.DistributedLock.PostgreSql.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.SqlServer.Tests/EricksonLopez.DistributedLock.SqlServer.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.MySql.Tests/EricksonLopez.DistributedLock.MySql.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.MariaDb.Tests/EricksonLopez.DistributedLock.MariaDb.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.Oracle.Tests/EricksonLopez.DistributedLock.Oracle.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.Sqlite.Tests/EricksonLopez.DistributedLock.Sqlite.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.Redis.Tests/EricksonLopez.DistributedLock.Redis.Tests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.IntegrationTests/EricksonLopez.DistributedLock.IntegrationTests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.ArchitectureTests/EricksonLopez.DistributedLock.ArchitectureTests.csproj" />
+    <Project Path="tests/EricksonLopez.DistributedLock.AotSmokeTest/EricksonLopez.DistributedLock.AotSmokeTest.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/EricksonLopez.DistributedLock.Showcase/EricksonLopez.DistributedLock.Showcase.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,24 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>EricksonLopez.DistributedLock.Redis</AssemblyName>
+    <RootNamespace>EricksonLopez.DistributedLock.Redis</RootNamespace>
+    <PackageId>EricksonLopez.DistributedLock.Redis</PackageId>
+    <Description>Redis distributed lock provider implementing IDistributedLockProvider for the EricksonLopez platform using StackExchange.Redis with Lua scripts for atomic release and lease renewals. Features zero-allocation error handling and OpenTelemetry instrumentation. Native AOT compatibility is subject to StackExchange.Redis AOT support for the specific version in use.</Description>
+    <PackageTags>$(CommonPackageTags);redis;redlock;stackexchange-redis;lua;opentelemetry</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EricksonLopez.DistributedLock.Abstractions\EricksonLopez.DistributedLock.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>EricksonLopez.DistributedLock.Sqlite</AssemblyName>
+    <RootNamespace>EricksonLopez.DistributedLock.Sqlite</RootNamespace>
+    <PackageId>EricksonLopez.DistributedLock.Sqlite</PackageId>
+    <Description>SQLite lock provider implementing IDistributedLockProvider for the EricksonLopez platform using database-enforced concurrency locks via Microsoft.Data.Sqlite. Features 100% Native AOT compatibility, zero-allocation error handling, and OpenTelemetry instrumentation.</Description>
+    <PackageTags>$(CommonPackageTags);sqlite;sqlite3;cross-process;opentelemetry</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EricksonLopez.DistributedLock.Abstractions\EricksonLopez.DistributedLock.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

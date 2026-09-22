@@ -1,0 +1,17 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>EricksonLopez.DistributedLock.Abstractions</AssemblyName>
+    <RootNamespace>EricksonLopez.DistributedLock.Abstractions</RootNamespace>
+    <PackageId>EricksonLopez.DistributedLock.Abstractions</PackageId>
+    <Description>Tier 0 distributed locking contracts, provider abstractions, and Result-based failure models for the EricksonLopez platform.</Description>
+    <PackageTags>$(CommonPackageTags);mutex;distributed-systems;result-pattern;opentelemetry;fencing-token</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EricksonLopez.Result" />
+  </ItemGroup>
+
+</Project>

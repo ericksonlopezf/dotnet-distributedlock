@@ -1,0 +1,84 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Project>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" Condition="Exists($([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../')))" />
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <IsAotCompatible>true</IsAotCompatible>
+    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <Authors>Erickson Lopez</Authors>
+    <Company>Erickson Lopez</Company>
+    <Copyright>Copyright © Erickson Lopez. MIT License.</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://ericksonlopez.dev/distributedlock</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ericksonlopezf/dotnet-distributedlock</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <CommonPackageTags>dotnet;csharp;distributed-lock;concurrency;native-aot</CommonPackageTags>
+    <PackageTags>$(CommonPackageTags)</PackageTags>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EnableSourceLink Condition="'$(GITHUB_ACTIONS)' != 'true'">false</EnableSourceLink>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <!-- Strong Name Signing -->
+  <PropertyGroup Condition="Exists('$(MSBuildThisFileDirectory)EricksonLopez.snk')">
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)EricksonLopez.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <!-- Production libraries documentation generation -->
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true' and !$(MSBuildProjectName.EndsWith('.Tests')) and '$(MSBuildProjectName)' != 'EricksonLopez.DistributedLock.AotSmokeTest' and '$(MSBuildProjectName)' != 'EricksonLopez.DistributedLock.Showcase'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Showcase configuration -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'EricksonLopez.DistributedLock.Showcase'">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
+    <EnableSourceLink>false</EnableSourceLink>
+    <SonarQubeExclude>true</SonarQubeExclude>
+    <NoWarn>$(NoWarn);CA1822;CA2007;CA1848;CA1873;CA1515;IL2090;IL2026;IL2075;IL2072;IL2060</NoWarn>
+  </PropertyGroup>
+
+  <!-- Non-production Executables Excluded from SonarCloud Analysis -->
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'EricksonLopez.DistributedLock.AotSmokeTest'">
+    <SonarQubeExclude>true</SonarQubeExclude>
+  </PropertyGroup>
+
+  <!-- Package assets inclusion -->
+  <ItemGroup Condition="'$(IsPackable)' == 'true'">
+    <None Include="$(MSBuildThisFileDirectory)icon.png" Pack="true" PackagePath="icon.png" Condition="Exists('$(MSBuildThisFileDirectory)icon.png')" />
+    <None Include="$(MSBuildThisFileDirectory)assets\icon.png" Pack="true" PackagePath="icon.png" Condition="Exists('$(MSBuildThisFileDirectory)assets\icon.png') and !Exists('$(MSBuildThisFileDirectory)icon.png')" />
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="README.md" Condition="Exists('$(MSBuildThisFileDirectory)README.md')" />
+  </ItemGroup>
+
+  <!-- Test and Benchmark configuration -->
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true' or $(MSBuildProjectName.EndsWith('.Tests')) or '$(MSBuildProjectName)' == 'EricksonLopez.DistributedLock.IntegrationTests'">
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
+    <EnableSourceLink>false</EnableSourceLink>
+    <SonarQubeTestProject>true</SonarQubeTestProject>
+    <NoWarn>$(NoWarn);CS8600;CS8604;CA1515;CA1822;CA2007;CA1815;CA2201;CA1861;CA1862;CA1866;CA1002;CA1034;CA2225;CA2227;CA1304;CA1010;CA2215;NU1608;IL2026;IL2055;IL2060;IL2072;IL2073;IL2093;xUnit1030;xUnit1031</NoWarn>
+  </PropertyGroup>
+  <!-- Centralized Code Coverage Collector for Test Projects -->
+  <ItemGroup Condition="'$(IsTestProject)' == 'true' or $(MSBuildProjectName.EndsWith('.Tests')) or '$(MSBuildProjectName)' == 'EricksonLopez.DistributedLock.IntegrationTests'">
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
+</Project>

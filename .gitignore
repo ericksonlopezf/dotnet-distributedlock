@@ -1,0 +1,186 @@
+# Copyright © Erickson Lopez. MIT License.
+
+# =============================================================================
+# Build & Compilation Artifacts (.NET / MSBuild / Native AOT)
+# =============================================================================
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleasePublic/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Aa]rtifacts/
+out/
+[Pp]ublish/
+aot-output/
+.temp/
+[Bb]uild[Ll]og.*
+[Ll]og/
+[Ll]ogs/
+*.binlog
+*.log
+
+# =============================================================================
+# MSBuild / Roslyn Compiler Caches & User Overrides
+# =============================================================================
+*.props.user
+*.targets.user
+.cache/
+*.cache
+*.FileListAbsolute.txt
+*.IncrementalClean.txt
+
+# =============================================================================
+# NuGet Packaging & Local Packages
+# =============================================================================
+[Nn]upkgs/
+[Nn]ewGetPackages/
+*.nupkg
+*.snupkg
+
+# =============================================================================
+# Strong Name & Cryptographic Perimeter
+# =============================================================================
+# Exclude signing keys and private certificates
+*.snk
+!public.snk
+*.pfx
+*.p12
+*.key
+*.pem
+*.cer
+*.crt
+
+# =============================================================================
+# Testing, Code Coverage & Mutation Testing (Stryker)
+# =============================================================================
+[Tt]est[Rr]esults*/
+[Tt]est-[Rr]esults*/
+test-results/
+[Cc]overage[Rr]eport*/
+[Cc]overage-[Rr]eport*/
+coveragereport/
+coveragereport_*
+coverage-*/
+temp-coverage*/
+coverage-results/
+[Ss]tryker[Oo]utput/
+stryker-tmp/
+.stryker-tmp/
+.sonarqube/
+.scannerwork/
+*.trx
+*.coverage
+*.coveragexml
+coverage.*.xml
+*.cobertura.xml
+*.opencover.xml
+
+# =============================================================================
+# Benchmarking (BenchmarkDotNet)
+# =============================================================================
+BenchmarkDotNet.Artifacts/
+benchmarks/results/*
+!benchmarks/results/baseline.json
+
+# =============================================================================
+# Secrets & Local Environment Configuration
+# =============================================================================
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+*.local.json
+secrets.json
+.env
+.env.*
+!.env.example
+!.env.template
+
+# =============================================================================
+# IDEs & Developer Tooling
+# =============================================================================
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userprefs
+*.sln.docstates
+*.userosscache
+UpgradeLog*.XML
+UpgradeLog*.htm
+
+# JetBrains Rider & ReSharper
+.idea/
+*.DotSettings.user
+_ReSharper*/
+
+# Visual Studio Code (preserves shared team configuration)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/snippets/
+*.code-workspace
+.history/
+
+# Other Editors
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# Diagnostic Dumps & Native Interop Artifacts
+# =============================================================================
+*.dmp
+*.dump
+*.mdmp
+*.tlog
+*.idb
+*.ipch
+*.pch
+
+# =============================================================================
+# Operating System Artifacts
+# =============================================================================
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Linux / VCS Merge & Scratch
+*~
+*.swp
+*.swo
+*.bak
+*.orig
+*.rej
+
+# =============================================================================
+# Documentation & Static Generation
+# =============================================================================
+docs/*.html
+_site/
+
+# =============================================================================
+# Scripts & Node.js Tooling
+# =============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,24 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>EricksonLopez.DistributedLock.MySql</AssemblyName>
+    <RootNamespace>EricksonLopez.DistributedLock.MySql</RootNamespace>
+    <PackageId>EricksonLopez.DistributedLock.MySql</PackageId>
+    <Description>MySQL user-level lock provider implementing IDistributedLockProvider for the EricksonLopez platform using GET_LOCK / RELEASE_LOCK via MySqlConnector. Features 100% Native AOT compatibility, zero-allocation error handling, and OpenTelemetry instrumentation.</Description>
+    <PackageTags>$(CommonPackageTags);mysql;mysqlconnector;user-lock;get-lock;opentelemetry</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySqlConnector" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EricksonLopez.DistributedLock.Abstractions\EricksonLopez.DistributedLock.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,167 @@
+# Copyright © Erickson Lopez. MIT License.
+name: CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fast-checks:
+    name: Fast Checks & Architectural Gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Verify Formatting (dotnet format)
+        run: dotnet format --verify-no-changes
+
+      - name: Architectural & Compliance Verification
+        run: dotnet test tests/EricksonLopez.DistributedLock.ArchitectureTests/EricksonLopez.DistributedLock.ArchitectureTests.csproj -c Release --framework net10.0
+
+      - name: Run Repository Compliance Verifier
+        shell: pwsh
+        run: ./scripts/verify-compliance.ps1
+
+  build-and-test:
+    name: Build & Test Matrix
+    needs: fast-checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
+        with:
+          java-version: 17
+          distribution: 'zulu'
+
+      - name: Install SonarScanner tool
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Restore Dependencies
+        run: dotnet restore EricksonLopez.DistributedLock.slnx
+
+      - name: Begin Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: env.SONAR_TOKEN != ''
+        run: |
+          dotnet sonarscanner begin \
+            /k:"ericksonlopezf_dotnet-distributedlock" \
+            /o:"ericksonlopezf" \
+            /d:sonar.token="$SONAR_TOKEN" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.cs.opencover.reportsPaths="./test-results/**/coverage.opencover.xml" \
+            /d:sonar.coverage.exclusions="tests/**,samples/**,benchmarks/**,**/*Tests.cs,**/*Test*.cs,**/bin/**,**/obj/**" \
+            /d:sonar.cpd.exclusions="tests/**,samples/**,benchmarks/**,**/*Tests.cs,**/*Test*.cs,**/bin/**,**/obj/**"
+
+      - name: Compile Solution
+        run: dotnet build EricksonLopez.DistributedLock.slnx -c Release --no-restore /p:TreatWarningsAsErrors=false
+
+      - name: Execute Unit and Architecture Tests
+        run: >
+          dotnet test EricksonLopez.DistributedLock.slnx
+          -c Release
+          --no-build
+          --filter "FullyQualifiedName!~IntegrationTests"
+          --logger "trx;LogFileName=test-results.trx"
+          --results-directory ./test-results
+          --collect:"XPlat Code Coverage"
+          --
+          DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover,cobertura
+
+      - name: End Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: always() && env.SONAR_TOKEN != ''
+        run: dotnet sonarscanner end /d:sonar.token="$SONAR_TOKEN"
+
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
+        continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ericksonlopezf/dotnet-distributedlock
+          files: "./test-results/**/coverage.cobertura.xml,./test-results/**/coverage.opencover.xml"
+          fail_ci_if_error: false
+
+  aot-smoke-test:
+    name: Native AOT Compilation Guard
+    needs: fast-checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Compile Native AOT Smoke Test Binary
+        run: dotnet publish tests/EricksonLopez.DistributedLock.AotSmokeTest/EricksonLopez.DistributedLock.AotSmokeTest.csproj -c Release -r linux-x64 /p:PublishAot=true /warnaserror
+
+      - name: Execute Native AOT Smoke Test
+        run: |
+          chmod +x ./tests/EricksonLopez.DistributedLock.AotSmokeTest/bin/Release/net10.0/linux-x64/publish/EricksonLopez.DistributedLock.AotSmokeTest
+          ./tests/EricksonLopez.DistributedLock.AotSmokeTest/bin/Release/net10.0/linux-x64/publish/EricksonLopez.DistributedLock.AotSmokeTest
+
+  pack-validation:
+    name: NuGet Packaging & Metadata Validation
+    needs: [build-and-test, aot-smoke-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
+
+      - name: Restore Dependencies
+        run: dotnet restore EricksonLopez.DistributedLock.slnx
+
+      - name: Build NuGet Packages
+        run: dotnet pack EricksonLopez.DistributedLock.slnx -c Release --no-restore -o ./artifacts
+
+      - name: Verify Package Artifacts Exist
+        run: |
+          count=$(find ./artifacts -name "*.nupkg" | wc -l)
+          if [ "$count" -lt 8 ]; then
+            echo "Expected 8 NuGet packages, found $count"
+            exit 1
+          fi
+          echo "Successfully validated $count packages."

@@ -1,0 +1,24 @@
+<!-- Copyright © Erickson Lopez. MIT License. -->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>EricksonLopez.DistributedLock.Oracle</AssemblyName>
+    <RootNamespace>EricksonLopez.DistributedLock.Oracle</RootNamespace>
+    <PackageId>EricksonLopez.DistributedLock.Oracle</PackageId>
+    <Description>Oracle Database lock provider implementing IDistributedLockProvider for the EricksonLopez platform using DBMS_LOCK via Oracle.ManagedDataAccess.Core. Features 100% Native AOT compatibility, zero-allocation error handling, and OpenTelemetry instrumentation.</Description>
+    <PackageTags>$(CommonPackageTags);oracle;oracledb;dbms-lock;opentelemetry</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Options" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EricksonLopez.DistributedLock.Abstractions\EricksonLopez.DistributedLock.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
