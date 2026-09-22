@@ -14,7 +14,7 @@ function loadThresholds(rootDir = process.cwd()) {
     const configPath = path.join(rootDir, 'stryker-config.json');
     if (fs.existsSync(configPath)) {
       let raw = fs.readFileSync(configPath, 'utf8');
-      if (raw.charCodeAt(0) === 0xFEFF) {
+      if (raw.codePointAt(0) === 0xFEFF) {
         raw = raw.slice(1);
       }
       const config = JSON.parse(raw);
@@ -87,23 +87,6 @@ async function verifyMutationGate({ github, context, core }) {
   console.log(`Max Report Age  : ${MAX_REPORT_AGE_DAYS} days`);
   console.log(`Thresholds      : High: ≥${thresholds.high}%, Low: ≥${thresholds.low}%, Break: ≥${thresholds.break}%`);
   console.log(`============================================================\n`);
-
-  const skipGate = process.env.SKIP_MUTATION_GATE === 'true' ||
-                   context.payload?.inputs?.skip_mutation_gate === true ||
-                   context.payload?.inputs?.skip_mutation_gate === 'true';
-
-  if (skipGate) {
-    console.log(`⚠️ STRYKER GATE BYPASS: skip_mutation_gate parameter is enabled. Quality gate bypassed.`);
-    if (core && typeof core.setOutput === 'function') {
-      core.setOutput('needs_stryker', 'false');
-      core.setOutput('can_proceed', 'true');
-      core.setOutput('bypassed', 'true');
-    }
-    if (core && core.summary) {
-      await core.summary.addRaw(`\n> [!WARNING]\n> Stryker Mutation Quality Gate bypassed via \`skip_mutation_gate\` parameter.\n`).write();
-    }
-    return { passed: true, bypassed: true, needsStryker: false, canProceed: true };
-  }
 
   let evaluatedCommit = null;
   let executionDate = null;

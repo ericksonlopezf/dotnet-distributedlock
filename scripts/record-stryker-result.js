@@ -7,7 +7,7 @@ function loadThresholds(configPath = 'stryker-config.json') {
   try {
     if (fs.existsSync(configPath)) {
       let raw = fs.readFileSync(configPath, 'utf8');
-      if (raw.charCodeAt(0) === 0xFEFF) {
+      if (raw.codePointAt(0) === 0xFEFF) {
         raw = raw.slice(1);
       }
       const config = JSON.parse(raw);

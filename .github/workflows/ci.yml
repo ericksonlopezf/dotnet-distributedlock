@@ -77,8 +77,8 @@ jobs:
             /d:sonar.token="$SONAR_TOKEN" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.cs.opencover.reportsPaths="./test-results/**/coverage.opencover.xml" \
-            /d:sonar.coverage.exclusions="tests/**,samples/**,benchmarks/**,**/*Tests.cs,**/*Test*.cs,**/bin/**,**/obj/**" \
-            /d:sonar.cpd.exclusions="tests/**,samples/**,benchmarks/**,**/*Tests.cs,**/*Test*.cs,**/bin/**,**/obj/**"
+            /d:sonar.coverage.exclusions="tests/**,samples/**,benchmarks/**,scripts/**,**/*Tests.cs,**/*Test*.cs,**/bin/**,**/obj/**" \
+            /d:sonar.cpd.exclusions="tests/**,samples/**,benchmarks/**,scripts/**,**/*Tests.cs,**/*Test*.cs,**/bin/**,**/obj/**"
 
       - name: Compile Solution
         run: dotnet build EricksonLopez.DistributedLock.slnx -c Release --no-restore /p:TreatWarningsAsErrors=false
