@@ -6,7 +6,11 @@ function loadThresholds(configPath = 'stryker-config.json') {
   let thresholds = { high: 100, low: 98, break: 95 };
   try {
     if (fs.existsSync(configPath)) {
-      const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      let raw = fs.readFileSync(configPath, 'utf8');
+      if (raw.charCodeAt(0) === 0xFEFF) {
+        raw = raw.slice(1);
+      }
+      const config = JSON.parse(raw);
       const t = config['stryker-config']?.thresholds || config.thresholds || {};
       thresholds = { high: t.high ?? 100, low: t.low ?? 98, break: t.break ?? 95 };
     }

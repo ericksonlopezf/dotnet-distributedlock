@@ -1,4 +1,4 @@
-﻿{
+{
     "stryker-config":  {
                            "project":  "EricksonLopez.DistributedLock.Sqlite.csproj",
                            "test-projects":  [

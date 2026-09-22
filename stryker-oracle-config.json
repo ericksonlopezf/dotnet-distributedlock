@@ -1,4 +1,4 @@
-﻿{
+{
     "stryker-config":  {
                            "project":  "EricksonLopez.DistributedLock.Oracle.csproj",
                            "test-projects":  [

@@ -1,4 +1,4 @@
-﻿{
+{
     "stryker-config":  {
                            "project":  "EricksonLopez.DistributedLock.MariaDb.csproj",
                            "test-projects":  [

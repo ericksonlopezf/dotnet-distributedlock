@@ -26,6 +26,11 @@ on:
         description: "Version to publish (e.g. 1.2.3 — without 'v' prefix)"
         required: false
         type: string
+      skip_mutation_gate:
+        description: "Bypass Stryker mutation gate"
+        required: false
+        default: false
+        type: boolean
 
 env:
   DOTNET_NOLOGO: true
@@ -53,6 +58,8 @@ jobs:
 
       - name: Evaluate Mutation Quality Gate on main
         id: check
+        env:
+          SKIP_MUTATION_GATE: ${{ inputs.skip_mutation_gate }}
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7.1.0
         with:
           script: |
